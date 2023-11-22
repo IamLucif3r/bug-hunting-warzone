@@ -23,6 +23,7 @@ RUN apt-get update && \
     wget \
     tar \
     zip \
+    unzip \
     curl \
     make \
     nmap \
@@ -51,8 +52,7 @@ ENV GOPATH /root/go
 ENV PATH ${GOPATH}/bin:${GOROOT}/bin:${PATH}
 
 # Seclists
-RUN cd ${HOME}/wordlist \
-    wget -cq https://github.com/danielmiessler/SecLists/archive/master.zip -O /usr/share/wordlists/SecList.zip \
+RUN wget -cq https://github.com/danielmiessler/SecLists/archive/master.zip -O /usr/share/wordlists/SecList.zip \
     cd /usr/share/wordlists/  \
     unzip -o /usr/share/wordlists/SecList.zip \
     mv SecLists-master SecLists \
@@ -103,6 +103,16 @@ RUN go install github.com/ffuf/ffuf@latest
 
 # HTTProbe
 RUN go install github.com/tomnomnom/httprobe@latest
+
+# HTTPx
+RUN go install -v github.com/projectdiscovery/httpx/cmd/httpx@latest
+
+#XSStrike
+RUN cd ${HOME}/tools &&\
+    git clone https://github.com/s0md3v/XSStrike.git && \
+    cd XSStrike/ && \
+    pip3 install -r requirements.txt &&\
+    cd ${HOME}
 
 #Gitgrabber
 RUN cd ${HOME}/tools && \
